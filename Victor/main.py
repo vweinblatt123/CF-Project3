@@ -19,6 +19,10 @@ from pypfopt import objective_functions
 
 tickers = ["AMC","AMD","BABA","BB","BBBY","GME","MVIS","NVDA","TSLA","BTC","BCH","ETH","ETC","LTC","XRP","DOGE"]
 
+bl_column_width = [3,3,3,3,3]
+
+st.set_page_config(layout="wide")
+
 #containers
 header = st.beta_container()
 RetAndCorr = st.beta_container()
@@ -43,7 +47,7 @@ def get_data(filename):
     return data
 
 with header:
-    st.title("#Welcome to YOLO advisors Inc")
+    st.title("#Welcome to YOLO Advisors Inc")
 
 
 with RetAndCorr:
@@ -72,47 +76,47 @@ with Markowitz:
     df_total_min_max = st.selectbox('Max or not',options=["Maxmize","Minimize"])
     
     if df_total_min_max == "Minimize":
-        percentage = st.number_input('percentage',min_value=0.00,value=0.027,step=0.01,key="7")
+        percentage = st.number_input('percentage',min_value=0.00,value=0.027,step=0.01,key="3")
     else:
         pass
     
     
 with BlackLitterman:
     st.header("Black Litterman")
-    col1, col2, col3, col4, col5 = st.beta_columns ([2,2,2,2.8,2.8])
-    B1=col1.selectbox('select',options=tickers,key="1")
-    B2=col2.selectbox('your view',options=["will outperform","will underperform"],key="2")
-    B3=col3.selectbox('select',options=tickers,key="3")
-    B4=col4.number_input('percentage',min_value=0.00,value=0.027,step=0.01,key="1")
-    B5=col5.number_input('confidence level',min_value=1.0, max_value=100.0, value=20.0,step=4.0,key="2")
+    col1, col2, col3, col4, col5 = st.beta_columns (bl_column_width)
+    B1=col1.selectbox('select',options=tickers,key = "4")
+    B2=col2.selectbox('your view',options=["will outperform","will underperform"], key = "5")
+    B3=col3.selectbox('select',options=tickers, key = "6")
+    B4=col4.number_input('percentage',min_value=0.00,value=0.0,step=1.0, key = "7")
+    B5=col5.number_input('confidence level',min_value=1.0, max_value=100.0, value=50.0,step=5.0, key = "8")
     
-    col1, col2, col3, col4, col5 = st.beta_columns ([2,2,2,2.8,2.8])
-    B1=col1.selectbox('select',options=tickeres,key="2")
-    B2=col2.selectbox('your view',options=["will outperform","will underperform"],key="3")
-    B3=col3.selectbox('select',options=tickers,key="4")
-    B4=col4.number_input('percentage',min_value=0.00,value=0.027,step=0.01,key="2")
-    B5=col5.number_input('confidence level',min_value=1.0, max_value=100.0, value=20.0,step=4.0,key="3")
+    col1, col2, col3, col4, col5 = st.beta_columns (bl_column_width)
+    B1=col1.selectbox('select',options=tickers, key = "9")
+    B2=col2.selectbox('your view',options=["will outperform","will underperform"], key = "10")
+    B3=col3.selectbox('select',options=tickers, key = "11")
+    B4=col4.number_input('percentage',min_value=0.00,value=0.0,step=1.0, key = "12")
+    B5=col5.number_input('confidence level',min_value=1.0, max_value=100.0, value=50.0,step=5.0, key = "13")
     
-    col1, col2, col3, col4, col5 = st.beta_columns ([2,2,2,2.8,2.8])
-    B1=col1.selectbox('select',options=tickers,key="3")
-    B2=col2.selectbox('your view',options=["will outperform","will underperform"],key="4")
-    B3=col3.selectbox('select',options=tickers,key="5")
-    B4=col4.number_input('percentage',min_value=0.00,value=0.027,step=0.01,key="3")
-    B5=col5.number_input('confidence level',min_value=1.0, max_value=100.0, value=20.0,step=4.0,key="4")
+    col1, col2, col3, col4, col5 = st.beta_columns (bl_column_width)
+    B1=col1.selectbox('select',options=tickers, key = "14")
+    B2=col2.selectbox('your view',options=["will outperform","will underperform"], key = "15")
+    B3=col3.selectbox('select',options=tickers, key = "16")
+    B4=col4.number_input('percentage',min_value=0.00,value=0.0,step=1.0, key = "17")
+    B5=col5.number_input('confidence level',min_value=1.0, max_value=100.0, value=50.0,step=5.0, key = "18")
     
-    col1, col2, col3, col4, col5 = st.beta_columns ([2,2,2,2.8,2.8])
-    B1=col1.selectbox('select',options=tickers,key="4")
-    B2=col2.selectbox('your view',options=["will outperform","will underperform"],key="5")
-    B3=col3.selectbox('select',options=tickers,key="6")
-    B4=col4.number_input('percentage',min_value=0.00,value=0.027,step=0.01,key="4")
-    B5=col5.number_input('confidence level',min_value=1.0, max_value=100.0, value=20.0,step=4.0,key="5")
+    col1, col2, col3, col4, col5 = st.beta_columns (bl_column_width)
+    B1=col1.selectbox('select',options=tickers, key = "19")
+    B2=col2.selectbox('your view',options=["will outperform","will underperform"], key = "20")
+    B3=col3.selectbox('select',options=tickers, key = "21")
+    B4=col4.number_input('percentage',min_value=0.00,value=0.0,step=1.0, key = "22")
+    B5=col5.number_input('confidence level',min_value=1.0, max_value=100.0, value=50.0,step=5.0, key = "23")
     
-    col1, col2, col3, col4, col5 = st.beta_columns ([2,2,2,2.8,2.8])
-    B1=col1.selectbox('select',options=tickers,key="5")
-    B2=col2.selectbox('your view',options=["will outperform","will underperform"],key="6")
-    B3=col3.selectbox('select',options=tickers,key="7")
-    B4=col4.number_input('percentage',min_value=0.00,value=0.027,step=0.01,key="5")
-    B5=col5.number_input('confidence level',min_value=1.0, max_value=100.0, value=20.0,step=4.0,key="6")
+    col1, col2, col3, col4, col5 = st.beta_columns (bl_column_width)
+    B1=col1.selectbox('select',options=tickers, key = "24")
+    B2=col2.selectbox('your view',options=["will outperform","will underperform"], key = "25")
+    B3=col3.selectbox('select',options=tickers, key = "26")
+    B4=col4.number_input('percentage',min_value=0.00,value=0.0,step=1.0, key = "27")
+    B5=col5.number_input('confidence level',min_value=1.0, max_value=100.0, value=50.0,step=5.0, key = "28")
 
     
 
