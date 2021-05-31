@@ -18,18 +18,26 @@ from pypfopt import CLA, plotting
 from pypfopt import objective_functions
 
 #@st.cache
-def mean_variance(prices, objective):
+def mean_variance(prices, objective, percentage):
     S = risk_models.CovarianceShrinkage(prices).ledoit_wolf()
     mu = expected_returns.mean_historical_return(prices)
     
     ef = EfficientFrontier(mu, S) 
-    ef.max_sharpe()
-    weights_maxsharpe = ef.clean_weights()
+    ef.add_objective(objective_functions.L2_reg, gamma=0.1) 
+    
+    if(objective == "Maximize Sharpe Ratio"):
+        ef.max_sharpe()
+    elif(objective == "Maximize Return for given level of Risk"):    
+        ef.efficient_risk(percentage/100)
+    else:
+        ef.efficient_return(percentage/100)
+        
+    weights = ef.clean_weights()
     
     port_perf = ef.portfolio_performance(verbose=True);
     
     #pd.Series(weights_maxsharpe).plot.pie(figsize=(10,10));
-    weights_df = pd.DataFrame(weights_maxsharpe.values(), weights_maxsharpe.keys())
+    weights_df = pd.DataFrame(weights.values(), weights.keys())
     weights_df.rename(columns = {0:"weight"}, inplace = True)
     
     n_samples = 10000
@@ -45,15 +53,21 @@ def mean_variance(prices, objective):
     plotting.plot_efficient_frontier(ef, ax=ax, show_assets=False)
 
     # Find and plot the tangency portfolio
-    ef.max_sharpe()
+    if(objective == "Maximize Sharpe Ratio"):
+        ef.max_sharpe()
+    elif(objective == "Maximize Return for given level of Risk"):    
+        ef.efficient_risk(percentage/100)
+    else:
+        ef.efficient_return(percentage/100)
+        
     ret_tangent, std_tangent, _ = ef.portfolio_performance()
-    ax.scatter(std_tangent, ret_tangent, marker="*", s=100, c="r", label="Max Sharpe")
+    ax.scatter(std_tangent, ret_tangent, marker="*", s=100, c="r", label=objective)
 
     # Plot random portfolios
     ax.scatter(stds, rets, marker=".", c=sharpes, cmap="viridis_r")
 
     # Format
-    ax.set_title("Efficient Frontier with random portfolios")
+    ax.set_title("Efficient Frontier")
     ax.legend()
     plt.tight_layout()
     #plt.show()

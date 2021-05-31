@@ -82,11 +82,15 @@ with Markowitz:
     
     col1, col2 = st.beta_columns([20, 5])
     objective = col1.selectbox('Objective',options=["Maximize Sharpe Ratio","Maximize Return for given level of Risk","Minimize Risk for given level of Return"])
-    percentage = col2.number_input('% (not applicable for maximizing Sharpe)', min_value = 0.0, value = 0.0, step = 1.0)
+    percentage = col2.number_input('% (not applicable for maximizing Sharpe)', min_value = 0.0, value = 70.0, step = 5.0)
     
-    weights, port_perf, plt = mean_variance(df_select_assets, "obj")
+    weights, port_perf, plt = mean_variance(df_select_assets, objective, percentage)
     
-    graph_col, pie_col = st.beta_columns(2)
+    st.write("Expected annual return: " + str(round(port_perf[0]*100,2)) + "%")
+    st.write("Annual volatility: " + str(round(port_perf[1]*100,2)) + "%")
+    st.write("Sharpe Ratio: " + str(round(port_perf[2],2)))
+    
+    pie_col, graph_col = st.beta_columns(2)
     fig = px.pie(weights, values = weights["weight"]*100, names = weights.index)
     pie_col.plotly_chart(fig)
     graph_col.pyplot(plt);
