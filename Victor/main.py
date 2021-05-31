@@ -49,13 +49,13 @@ with header:
 with RetAndCorr:
     st.header("Investment Universe")
     st.text("Choose the stocks and cryptos you want to invest in")
-    stock = ['AMC','AMD','BABA', 'BB','BBBY','GME','MVIS','NVDA',"TSLA","BTC","BCH","ETH","ETC", "LTC","XRP","EOS","DOGE"]
-    selct_stock = st.multiselect('select investments', stock, key="1")
+    assets = tickers
+    select_asset = st.multiselect('select investments', assets, key="1")
     
-    df_select_stock = all_prices_clean[selct_stock]
+    df_select_asset = all_prices_clean[select_asset]
     
-    st.write('prices_stock'+str(df_select_stock.shape[0]))
-    st.write(df_select_stock)
+    st.write('prices_asset'+str(df_select_asset.shape[0]))
+    st.write(df_select_asset)
     
     #S = risk_models.CovarianceShrinkage(df_select_stock).ledoit_wolf()
     #plotting.plot_covariance(S, plot_correlation=True)
@@ -65,10 +65,10 @@ with Markowitz:
     st.header("Markowitz")
     st.text("description....")
     
-    choose = ['AMC','AMD','BABA', 'BB','BBBY','GME','MVIS','NVDA',"TSLA","BTC","BCH","ETH","ETC", "LTC","XRP","EOS","DOGE"]
-    selected_stock = st.multiselect('select investments', choose, key="2")
+    choose = tickers
+    selected_asset = st.multiselect('select investments', choose, key="2")
     
-    df_selected_stock = all_prices_clean[selected_stock]
+    df_selected_asset = all_prices_clean[selected_asset]
     df_total_min_max = st.selectbox('Max or not',options=["Maxmize","Minimize"])
     
     if df_total_min_max == "Minimize":
@@ -80,37 +80,37 @@ with Markowitz:
 with BlackLitterman:
     st.header("Black Litterman")
     col1, col2, col3, col4, col5 = st.beta_columns ([2,2,2,2.8,2.8])
-    B1=col1.selectbox('select',options=["AMC","AMD","BABA", "BB","BBBY","GME","MVIS","NVDA","TSLA","BTC","BCH","ETH","ETC", "LTC","XRP","EOS","DOGE"],key="1")
+    B1=col1.selectbox('select',options=tickers,key="1")
     B2=col2.selectbox('your view',options=["will outperform","will underperform"],key="2")
-    B3=col3.selectbox('select',options=["AMC","AMD","BABA", "BB","BBBY","4ME","MVIS","NVDA","TSLA","BTC","BCH","ETH","ETC", "LTC","XRP","EOS","DOGE"],key="3")
+    B3=col3.selectbox('select',options=tickers,key="3")
     B4=col4.number_input('percentage',min_value=0.00,value=0.027,step=0.01,key="1")
     B5=col5.number_input('confidence level',min_value=1.0, max_value=100.0, value=20.0,step=4.0,key="2")
     
     col1, col2, col3, col4, col5 = st.beta_columns ([2,2,2,2.8,2.8])
-    B1=col1.selectbox('select',options=["AMC","AMD","BABA", "BB","BBBY","GME","MVIS","NVDA","TSLA","BTC","BCH","ETH","ETC", "LTC","XRP","EOS","DOGE"],key="2")
+    B1=col1.selectbox('select',options=tickeres,key="2")
     B2=col2.selectbox('your view',options=["will outperform","will underperform"],key="3")
-    B3=col3.selectbox('select',options=["AMC","AMD","BABA", "BB","BBBY","4ME","MVIS","NVDA","TSLA","BTC","BCH","ETH","ETC", "LTC","XRP","EOS","DOGE"],key="4")
+    B3=col3.selectbox('select',options=tickers,key="4")
     B4=col4.number_input('percentage',min_value=0.00,value=0.027,step=0.01,key="2")
     B5=col5.number_input('confidence level',min_value=1.0, max_value=100.0, value=20.0,step=4.0,key="3")
     
     col1, col2, col3, col4, col5 = st.beta_columns ([2,2,2,2.8,2.8])
-    B1=col1.selectbox('select',options=["AMC","AMD","BABA", "BB","BBBY","GME","MVIS","NVDA","TSLA","BTC","BCH","ETH","ETC", "LTC","XRP","EOS","DOGE"],key="3")
+    B1=col1.selectbox('select',options=tickers,key="3")
     B2=col2.selectbox('your view',options=["will outperform","will underperform"],key="4")
-    B3=col3.selectbox('select',options=["AMC","AMD","BABA", "BB","BBBY","4ME","MVIS","NVDA","TSLA","BTC","BCH","ETH","ETC", "LTC","XRP","EOS","DOGE"],key="5")
+    B3=col3.selectbox('select',options=tickers,key="5")
     B4=col4.number_input('percentage',min_value=0.00,value=0.027,step=0.01,key="3")
     B5=col5.number_input('confidence level',min_value=1.0, max_value=100.0, value=20.0,step=4.0,key="4")
     
     col1, col2, col3, col4, col5 = st.beta_columns ([2,2,2,2.8,2.8])
-    B1=col1.selectbox('select',options=["AMC","AMD","BABA", "BB","BBBY","GME","MVIS","NVDA","TSLA","BTC","BCH","ETH","ETC", "LTC","XRP","EOS","DOGE"],key="4")
+    B1=col1.selectbox('select',options=tickers,key="4")
     B2=col2.selectbox('your view',options=["will outperform","will underperform"],key="5")
-    B3=col3.selectbox('select',options=["AMC","AMD","BABA", "BB","BBBY","4ME","MVIS","NVDA","TSLA","BTC","BCH","ETH","ETC", "LTC","XRP","EOS","DOGE"],key="6")
+    B3=col3.selectbox('select',options=tickers,key="6")
     B4=col4.number_input('percentage',min_value=0.00,value=0.027,step=0.01,key="4")
     B5=col5.number_input('confidence level',min_value=1.0, max_value=100.0, value=20.0,step=4.0,key="5")
     
     col1, col2, col3, col4, col5 = st.beta_columns ([2,2,2,2.8,2.8])
-    B1=col1.selectbox('select',options=["AMC","AMD","BABA", "BB","BBBY","GME","MVIS","NVDA","TSLA","BTC","BCH","ETH","ETC", "LTC","XRP","EOS","DOGE"],key="5")
+    B1=col1.selectbox('select',options=tickers,key="5")
     B2=col2.selectbox('your view',options=["will outperform","will underperform"],key="6")
-    B3=col3.selectbox('select',options=["AMC","AMD","BABA", "BB","BBBY","4ME","MVIS","NVDA","TSLA","BTC","BCH","ETH","ETC", "LTC","XRP","EOS","DOGE"],key="7")
+    B3=col3.selectbox('select',options=tickers,key="7")
     B4=col4.number_input('percentage',min_value=0.00,value=0.027,step=0.01,key="5")
     B5=col5.number_input('confidence level',min_value=1.0, max_value=100.0, value=20.0,step=4.0,key="6")
 
