@@ -4,7 +4,6 @@ import yfinance as yf
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-#import plotly.express as px
 from MCForecastTools import MCSimulation
 import panel as pn
 import seaborn as sns
@@ -17,7 +16,7 @@ from pypfopt import EfficientFrontier
 from pypfopt import CLA, plotting
 from pypfopt import objective_functions
 
-#@st.cache
+@st.cache
 def mean_variance(prices, objective, percentage):
     S = risk_models.CovarianceShrinkage(prices).ledoit_wolf()
     mu = expected_returns.mean_historical_return(prices)

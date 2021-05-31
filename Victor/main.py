@@ -1,16 +1,3 @@
-# import os
-# import requests
-# import yfinance as yf
-# import numpy as np
-# import pandas as pd
-# #import matplotlib.pyplot as plt
-# #import plotly.express as px
-# from MCForecastTools import MCSimulation
-# #import panel as pn
-# #import seaborn as sns
-# import streamlit as st
-# import altair as alt
-
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -43,20 +30,11 @@ BlackLitterman = st.beta_container()
 
 #data set
 crypto_prices = pd.read_csv('../Resources/crypto_prices.csv',parse_dates=True,index_col='Date',infer_datetime_format=True)
-#st.write(crypto_prices.head())
 stock_prices = pd.read_csv('../Resources/stock_prices.csv',parse_dates=True,index_col='Date',infer_datetime_format=True)
-#st.write(stock_prices.head())
 all_prices = crypto_prices.join(stock_prices)
 all_prices = all_prices.drop(columns="SPY")
 all_prices_clean = all_prices.dropna()
 st.write(all_prices_clean.head())
-
-
-#cache and reading data
-@st.cache
-def get_data(filename):
-    data = pd.read_csv(filename)
-    return data
 
 with header:
     st.title("#Welcome to YOLO Advisors Inc")
@@ -69,13 +47,7 @@ with RetAndCorr:
     select_assets = st.multiselect('select investments', assets, key="1")
     
     df_select_assets = all_prices_clean[select_assets]
-    
-    #st.write('prices_asset'+str(df_select_asset.shape[0]))
-    #st.write(df_select_asset)
-    
-    #S = risk_models.CovarianceShrinkage(df_select_asset).ledoit_wolf()
-    #plotting.plot_covariance(S, plot_correlation=True)
-    chart = st.line_chart(df_select_assets)    
+    st.line_chart(df_select_assets)    
     
 with Markowitz:
     st.header("Markowitz Mean-Variance Optimization")
