@@ -17,9 +17,12 @@ from pypfopt import EfficientFrontier
 from pypfopt import CLA, plotting
 from pypfopt import objective_functions
 
+from asset_allocation import mean_variance
+
 tickers = ["AMC","AMD","BABA","BB","BBBY","GME","MVIS","NVDA","TSLA","BTC","BCH","ETH","ETC","LTC","XRP","DOGE"]
 
 bl_column_width = [3,3,3,3,3]
+df_select_assets = []
 
 st.set_page_config(layout="wide")
 
@@ -54,31 +57,28 @@ with RetAndCorr:
     st.header("Investment Universe")
     st.text("Choose the stocks and cryptos you want to invest in")
     assets = tickers
-    select_asset = st.multiselect('select investments', assets, key="1")
+    select_assets = st.multiselect('select investments', assets, key="1")
     
-    df_select_asset = all_prices_clean[select_asset]
+    df_select_assets = all_prices_clean[select_assets]
     
-    st.write('prices_asset'+str(df_select_asset.shape[0]))
-    st.write(df_select_asset)
+    #st.write('prices_asset'+str(df_select_asset.shape[0]))
+    #st.write(df_select_asset)
     
-    #S = risk_models.CovarianceShrinkage(df_select_stock).ledoit_wolf()
+    #S = risk_models.CovarianceShrinkage(df_select_asset).ledoit_wolf()
     #plotting.plot_covariance(S, plot_correlation=True)
+    chart = st.line_chart(df_select_assets)
     
     
 with Markowitz:
-    st.header("Markowitz")
-    st.text("description....")
+    st.header("Markowitz Mean-Variance Optimization")
     
-    choose = tickers
-    selected_asset = st.multiselect('select investments', choose, key="2")
+    col1, col2 = st.beta_columns([20, 5])
+    objective = col1.selectbox('Objective',options=["Maximize Sharpe Ratio","Maximize Return for given level of Risk","Minimize Risk for given level of Return"])
+    percentage = col2.number_input('% (not applicable for maximizing Sharpe)', min_value = 0.0, value = 0.0, step = 1.0)
     
-    df_selected_asset = all_prices_clean[selected_asset]
-    df_total_min_max = st.selectbox('Max or not',options=["Maxmize","Minimize"])
+    weights_maxsharpe, port_perf, plt = mean_variance(df_select_assets, "obj")
     
-    if df_total_min_max == "Minimize":
-        percentage = st.number_input('percentage',min_value=0.00,value=0.027,step=0.01,key="3")
-    else:
-        pass
+    st.pyplot(plt);
     
     
 with BlackLitterman:
