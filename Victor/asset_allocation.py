@@ -17,7 +17,7 @@ from pypfopt import EfficientFrontier
 from pypfopt import CLA, plotting
 from pypfopt import objective_functions
 
-@st.cache
+#@st.cache
 def mean_variance(prices, objective):
     S = risk_models.CovarianceShrinkage(prices).ledoit_wolf()
     mu = expected_returns.mean_historical_return(prices)
@@ -29,6 +29,8 @@ def mean_variance(prices, objective):
     port_perf = ef.portfolio_performance(verbose=True);
     
     #pd.Series(weights_maxsharpe).plot.pie(figsize=(10,10));
+    weights_df = pd.DataFrame(weights_maxsharpe.values(), weights_maxsharpe.keys())
+    weights_df.rename(columns = {0:"weight"}, inplace = True)
     
     n_samples = 10000
     w = np.random.dirichlet(np.ones(len(mu)), n_samples)
@@ -56,4 +58,4 @@ def mean_variance(prices, objective):
     plt.tight_layout()
     #plt.show()
     
-    return weights_maxsharpe, port_perf, plt
+    return weights_df, port_perf, plt

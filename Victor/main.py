@@ -1,14 +1,23 @@
-import os
-import requests
-import yfinance as yf
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-#import plotly.express as px
-from MCForecastTools import MCSimulation
-import panel as pn
-import seaborn as sns
+# import os
+# import requests
+# import yfinance as yf
+# import numpy as np
+# import pandas as pd
+# #import matplotlib.pyplot as plt
+# #import plotly.express as px
+# from MCForecastTools import MCSimulation
+# #import panel as pn
+# #import seaborn as sns
+# import streamlit as st
+# import altair as alt
+
 import streamlit as st
+import pandas as pd
+import numpy as np
+import plotly.express as px
+from plotly.subplots import make_subplots
+import plotly.graph_objects as go
+import matplotlib.pyplot as plt
 
 import pypfopt
 from pypfopt import risk_models
@@ -66,8 +75,7 @@ with RetAndCorr:
     
     #S = risk_models.CovarianceShrinkage(df_select_asset).ledoit_wolf()
     #plotting.plot_covariance(S, plot_correlation=True)
-    chart = st.line_chart(df_select_assets)
-    
+    chart = st.line_chart(df_select_assets)    
     
 with Markowitz:
     st.header("Markowitz Mean-Variance Optimization")
@@ -76,9 +84,12 @@ with Markowitz:
     objective = col1.selectbox('Objective',options=["Maximize Sharpe Ratio","Maximize Return for given level of Risk","Minimize Risk for given level of Return"])
     percentage = col2.number_input('% (not applicable for maximizing Sharpe)', min_value = 0.0, value = 0.0, step = 1.0)
     
-    weights_maxsharpe, port_perf, plt = mean_variance(df_select_assets, "obj")
+    weights, port_perf, plt = mean_variance(df_select_assets, "obj")
     
-    st.pyplot(plt);
+    graph_col, pie_col = st.beta_columns(2)
+    fig = px.pie(weights, values = weights["weight"]*100, names = weights.index)
+    pie_col.plotly_chart(fig)
+    graph_col.pyplot(plt);
     
     
 with BlackLitterman:
