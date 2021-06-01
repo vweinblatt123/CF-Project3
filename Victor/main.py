@@ -166,7 +166,7 @@ with BlackLitterman:
     pie_col.plotly_chart(fig)
     graph_col.pyplot(plt) 
     
-    return_bar = px.bar(rets_df, barmode = "group", labels = {"index":"", "value" : "Returns (%)"}, title = "Prior vs Posterior Expected Returns ")
+    return_bar = px.bar(rets_df, barmode = "group", labels = {"index":"", "value" : "Returns (%)"}, title = "Prior vs Posterior Expected Returns")
     st.plotly_chart(return_bar)
     
     #print(select_assets)
