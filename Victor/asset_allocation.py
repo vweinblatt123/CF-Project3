@@ -9,19 +9,11 @@ import panel as pn
 import seaborn as sns
 import streamlit as st
 
-import pypfopt
-from pypfopt import risk_models
-from pypfopt import expected_returns
-from pypfopt import EfficientFrontier
-from pypfopt import CLA, plotting
-from pypfopt import objective_functions
+from pypfopt import risk_models, expected_returns, EfficientFrontier, CLA, plotting, objective_functions, black_litterman, BlackLittermanModel
 
 @st.cache
-def mean_variance(prices, objective, percentage):
-    S = risk_models.CovarianceShrinkage(prices).ledoit_wolf()
-    mu = expected_returns.mean_historical_return(prices)
-    
-    ef = EfficientFrontier(mu, S) 
+def build_efficient_frontier(S, mu, objective, percentage):
+    ef = EfficientFrontier(mu, S, weight_bounds=(0,1)) 
     ef.add_objective(objective_functions.L2_reg, gamma=0.1) 
     
     if(objective == "Maximize Sharpe Ratio"):
@@ -35,7 +27,6 @@ def mean_variance(prices, objective, percentage):
     
     port_perf = ef.portfolio_performance(verbose=True);
     
-    #pd.Series(weights_maxsharpe).plot.pie(figsize=(10,10));
     weights_df = pd.DataFrame(weights.values(), weights.keys())
     weights_df.rename(columns = {0:"weight"}, inplace = True)
     
@@ -46,7 +37,8 @@ def mean_variance(prices, objective, percentage):
     sharpes = rets / stds
     
     # Draw Efficient frontier
-    ef = EfficientFrontier(mu, S)
+    ef = EfficientFrontier(mu, S, weight_bounds = (0,1))
+    ef.add_objective(objective_functions.L2_reg, gamma=0.1) 
 
     fig, ax = plt.subplots()
     plotting.plot_efficient_frontier(ef, ax=ax, show_assets=False)
@@ -72,6 +64,34 @@ def mean_variance(prices, objective, percentage):
     #plt.show()
     
     return weights_df, port_perf, plt
+
+@st.cache
+def mean_variance(prices, objective, percentage):
+    S = risk_models.CovarianceShrinkage(prices).ledoit_wolf()
+    mu = expected_returns.mean_historical_return(prices)
+    
+    weights_df, port_perf, plt = build_efficient_frontier(S, mu, objective, percentage)
+    return weights_df, port_perf, plt
+    
+
+@st.cache
+def black_litterman_func(prices, market_prices, mcaps, select_assets, Q, P, confidences, objective, percentage):
+    
+    mcap_subset = {key: mcaps[key] for key in select_assets}
+    
+    S = risk_models.CovarianceShrinkage(prices).ledoit_wolf()
+    delta = black_litterman.market_implied_risk_aversion(market_prices)
+    market_prior = black_litterman.market_implied_prior_returns(mcap_subset, delta, S)
+    
+    bl = BlackLittermanModel(S, pi=market_prior, omega="idzorek", view_confidences=confidences, Q = Q, P = P)
+    ret_bl = bl.bl_returns()
+    rets_df = pd.DataFrame([market_prior*100, ret_bl*100], index=["Prior", "Posterior"]).T
+    S_bl = bl.bl_cov()
+    
+    weights_df, port_perf, plt = build_efficient_frontier(S_bl, ret_bl, objective, percentage)
+    
+    return weights_df, port_perf, plt, rets_df
+    
 
 @st.cache
 def monte_carlo(portfolio_data, weights):
