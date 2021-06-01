@@ -72,3 +72,18 @@ def mean_variance(prices, objective, percentage):
     #plt.show()
     
     return weights_df, port_perf, plt
+
+@st.cache
+def monte_carlo(portfolio_data, weights):
+
+    simulation_data = MCSimulation(
+        portfolio_data = portfolio_data,
+        weights = weights,
+        num_simulation = 100,
+        num_trading_days = 252
+    )
+    simulation_data.calc_cumulative_return()
+    line_plot = simulation_data.plot_simulation()
+    tbl = simulation_data.summarize_cumulative_return()
+
+    return line_plot, tbl
