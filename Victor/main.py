@@ -58,7 +58,7 @@ def build_views(B1, B2, B3, B4, B5):
 
 
 with header:
-    st.title("#Welcome to YOLO Advisors Inc (your robo-advisor to avoid #FOMO)")
+    st.title("#Welcome to YOLO Advisors Inc - your robo-advisor to avoid #FOMO")
 
 
 with RetAndCorr:
