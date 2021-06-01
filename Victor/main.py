@@ -6,13 +6,6 @@ from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 
-import pypfopt
-from pypfopt import risk_models
-from pypfopt import expected_returns
-from pypfopt import EfficientFrontier
-from pypfopt import CLA, plotting
-from pypfopt import objective_functions
-
 from asset_allocation import mean_variance, black_litterman_func, monte_carlo
 
 tickers = ["AMC","AMD","BABA","BB","BBBY","GME","MVIS","NVDA","TSLA","BTC","BCH","ETH","ETC","LTC","XRP","DOGE"]
