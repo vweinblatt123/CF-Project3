@@ -88,14 +88,14 @@ with Markowitz:
     pie_col.plotly_chart(fig)
     graph_col.pyplot(plt)
     
-#     plot_col, data_col = st.beta_columns(2)
-#     portfolio_data = df_select_assets
-#     input_tickers = df_select_assets.columns
-#     column_names = [(x,"close") for x in input_tickers]
-#     portfolio_data.columns = pd.MultiIndex.from_tuples(column_names)
-#     mc_plt, mc_tbl = monte_carlo(portfolio_data, weights["weight"].values)
-#     plot_col.pyplot(mc_plt)
-#     data_col.write(tbl)
+    plot_col, data_col = st.beta_columns(2)
+    portfolio_data = df_select_assets
+    input_tickers = df_select_assets.columns
+    column_names = [(x,"close") for x in input_tickers]
+    portfolio_data.columns = pd.MultiIndex.from_tuples(column_names)
+    mc_plt, mc_tbl = monte_carlo(portfolio_data, weights["weight"].values)
+    plot_col.pyplot(mc_plt)
+    data_col.write(tbl)
     
     
 with BlackLitterman:
