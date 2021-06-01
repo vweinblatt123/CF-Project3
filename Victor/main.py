@@ -23,15 +23,15 @@ Markowitz = st.beta_container()
 BlackLitterman = st.beta_container()
 
 #data set
-crypto_prices = pd.read_csv('../Resources/crypto_prices.csv',parse_dates=True,index_col='Date',infer_datetime_format=True)
-stock_prices = pd.read_csv('../Resources/stock_prices.csv',parse_dates=True,index_col='Date',infer_datetime_format=True)
+crypto_prices = pd.read_csv('Resources/crypto_prices.csv',parse_dates=True,index_col='Date',infer_datetime_format=True)
+stock_prices = pd.read_csv('Resources/stock_prices.csv',parse_dates=True,index_col='Date',infer_datetime_format=True)
 all_prices = crypto_prices.join(stock_prices)
 market_prices = all_prices['SPY']
 all_prices = all_prices.drop(columns="SPY")
 all_prices_clean = all_prices.dropna()
 #st.write(all_prices_clean.head())
 
-mcaps = pd.read_csv('../Resources/market_caps.csv')
+mcaps = pd.read_csv('Resources/market_caps.csv')
 mcaps = dict(mcaps.values)
 del mcaps['SPY']
 
