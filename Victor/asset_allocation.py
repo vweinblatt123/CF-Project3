@@ -11,7 +11,7 @@ import streamlit as st
 
 from pypfopt import risk_models, expected_returns, EfficientFrontier, CLA, plotting, objective_functions, black_litterman, BlackLittermanModel
 
-@st.cache
+#@st.cache
 def build_efficient_frontier(S, mu, objective, percentage):
     ef = EfficientFrontier(mu, S, weight_bounds=(0,1)) 
     ef.add_objective(objective_functions.L2_reg, gamma=0.1) 
@@ -65,7 +65,7 @@ def build_efficient_frontier(S, mu, objective, percentage):
     
     return weights_df, port_perf, plt
 
-@st.cache
+#@st.cache
 def mean_variance(prices, objective, percentage):
     S = risk_models.CovarianceShrinkage(prices).ledoit_wolf()
     mu = expected_returns.mean_historical_return(prices)
@@ -74,7 +74,7 @@ def mean_variance(prices, objective, percentage):
     return weights_df, port_perf, plt
     
 
-@st.cache
+#@st.cache
 def black_litterman_func(prices, market_prices, mcaps, select_assets, Q, P, confidences, objective, percentage):
     
     mcap_subset = {key: mcaps[key] for key in select_assets}
@@ -93,7 +93,7 @@ def black_litterman_func(prices, market_prices, mcaps, select_assets, Q, P, conf
     return weights_df, port_perf, plt, rets_df
     
 
-@st.cache
+#@st.cache
 def monte_carlo(portfolio_data, weights):
 
     simulation_data = MCSimulation(
@@ -103,7 +103,8 @@ def monte_carlo(portfolio_data, weights):
         num_trading_days = 252
     )
     simulation_data.calc_cumulative_return()
-    line_plot = simulation_data.plot_simulation()
+    fig, ax = plt.subplots() 
+    fig = simulation_data.plot_simulation()
     tbl = simulation_data.summarize_cumulative_return()
 
-    return line_plot, tbl
+    return fig, tbl
