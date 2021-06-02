@@ -103,8 +103,7 @@ def monte_carlo(portfolio_data, weights):
         num_trading_days = 252
     )
     simulation_data.calc_cumulative_return()
-    fig, ax = plt.subplots() 
-    fig = simulation_data.plot_simulation()
     tbl = simulation_data.summarize_cumulative_return()
+    sim_distribution = simulation_data.simulated_return.iloc[-1, :]
 
-    return fig, tbl
+    return sim_distribution, tbl

@@ -82,24 +82,33 @@ with Markowitz:
     
         weights, port_perf, plt = mean_variance(df_select_assets, objective, percentage)
     
-        st.write("Expected annual return: " + str(round(port_perf[0]*100,2)) + "%")
-        st.write("Annual volatility: " + str(round(port_perf[1]*100,2)) + "%")
-        st.write("Sharpe Ratio: " + str(round(port_perf[2],2)))
+        port_col, bench_col = st.beta_columns(2)
+        port_col.write("Expected annual return: " + str(round(port_perf[0]*100,2)) + "%")
+        port_col.write("Annual volatility: " + str(round(port_perf[1]*100,2)) + "%")
+        port_col.write("Sharpe Ratio: " + str(round(port_perf[2],2)))
+        bench_col.markdown("**Benchmark Sharpe Ratios**")
+        bench_col.write("Bitcoin: 1.29")
+        bench_col.write("S&P 500: 0.85")
 
         pie_col, graph_col = st.beta_columns(2)
         fig = px.pie(weights, values = weights["weight"]*100, names = weights.index)
         pie_col.plotly_chart(fig)
         graph_col.pyplot(plt)
     
-    #if st.button('Show Monte Carlo Simulation'):
-#         plot_col, data_col = st.beta_columns(2)
-#         portfolio_data = df_select_assets
-#         input_tickers = df_select_assets.columns
-#         column_names = [(x,"close") for x in input_tickers]
-#         portfolio_data.columns = pd.MultiIndex.from_tuples(column_names)
-#         mc_plt, mc_tbl = monte_carlo(portfolio_data, weights["weight"].values)
-#         plot_col.pyplot(mc_plt)
-#         data_col.write(tbl)
+        plot_col, data_col = st.beta_columns(2)
+        portfolio_data = df_select_assets
+        input_tickers = df_select_assets.columns
+        column_names = [(x,"close") for x in input_tickers]
+        portfolio_data.columns = pd.MultiIndex.from_tuples(column_names)
+        mc_sim, mc_tbl = monte_carlo(portfolio_data, weights["weight"].values)
+        fig, ax = plt.subplots()
+        ax.hist(mc_sim, bins=20, density = True)
+        ax.set_title("Monte Carlo Simulation Distribution")
+        ax.set_xlabel("Return")
+        ax.set_ylabel("Frequency")
+        plot_col.pyplot(fig)
+        mc_tbl.name = "Monte Carlo Simulation Distribution"
+        data_col.table(mc_tbl)
     
     
 with BlackLitterman:
@@ -157,10 +166,14 @@ with BlackLitterman:
         confidence = np.concatenate([x for x in [c_list1, c_list2, c_list3, c_list4, c_list5] if x.size > 0])    
 
         weights, port_perf, plt, rets_df = black_litterman_func(df_select_assets, market_prices, mcaps, select_assets, Q, P, confidence, objective_bl, percentage_bl)
-
-        st.write("Expected annual return: " + str(round(port_perf[0]*100,2)) + "%")
-        st.write("Annual volatility: " + str(round(port_perf[1]*100,2)) + "%")
-        st.write("Sharpe Ratio: " + str(round(port_perf[2],2)))
+        
+        port_col, bench_col = st.beta_columns(2)
+        port_col.write("Expected annual return: " + str(round(port_perf[0]*100,2)) + "%")
+        port_col.write("Annual volatility: " + str(round(port_perf[1]*100,2)) + "%")
+        port_col.write("Sharpe Ratio: " + str(round(port_perf[2],2)))
+        bench_col.write("**Benchmark Sharpe Ratios**")
+        bench_col.write("Bitcoin: 1.29")
+        bench_col.write("S&P 500: 0.85")
 
         pie_col, graph_col = st.beta_columns(2)
         fig = px.pie(weights, values = weights["weight"]*100, names = weights.index)
@@ -169,6 +182,21 @@ with BlackLitterman:
 
         return_bar = px.bar(rets_df, barmode = "group", labels = {"index":"", "value" : "Returns (%)"}, title = "Prior vs Posterior Expected Returns")
         st.plotly_chart(return_bar)
+        
+        plot_col, data_col = st.beta_columns(2)
+        portfolio_data = df_select_assets
+        input_tickers = df_select_assets.columns
+        column_names = [(x,"close") for x in input_tickers]
+        portfolio_data.columns = pd.MultiIndex.from_tuples(column_names)
+        mc_sim, mc_tbl = monte_carlo(portfolio_data, weights["weight"].values)
+        fig, ax = plt.subplots()
+        ax.hist(mc_sim, bins=20, density = True)
+        ax.set_title("Monte Carlo Simulation Distribution")
+        ax.set_xlabel("Return")
+        ax.set_ylabel("Frequency")
+        plot_col.pyplot(fig)
+        mc_tbl.name = "Monte Carlo Simulation Distribution"
+        data_col.table(mc_tbl)
     
     #print(select_assets)
     #print(Q)
