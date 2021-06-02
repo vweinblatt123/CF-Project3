@@ -13,7 +13,7 @@ from pypfopt import risk_models, expected_returns, EfficientFrontier, CLA, plott
 
 #@st.cache
 def build_efficient_frontier(S, mu, objective, percentage):
-    ef = EfficientFrontier(mu, S, weight_bounds=(0,1)) 
+    ef = EfficientFrontier(mu, S, weight_bounds=(0,1), solver = "ECOS") 
     ef.add_objective(objective_functions.L2_reg, gamma=0.1) 
     
     if(objective == "Maximize Sharpe Ratio"):
@@ -37,7 +37,7 @@ def build_efficient_frontier(S, mu, objective, percentage):
     sharpes = rets / stds
     
     # Draw Efficient frontier
-    ef = EfficientFrontier(mu, S, weight_bounds = (0,1))
+    ef = EfficientFrontier(mu, S, weight_bounds = (0,1), solver = "ECOS")
     ef.add_objective(objective_functions.L2_reg, gamma=0.1) 
 
     fig, ax = plt.subplots()

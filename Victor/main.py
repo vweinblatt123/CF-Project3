@@ -23,15 +23,15 @@ Markowitz = st.beta_container()
 BlackLitterman = st.beta_container()
 
 #data set
-crypto_prices = pd.read_csv('../Resources/crypto_prices.csv',parse_dates=True,index_col='Date',infer_datetime_format=True)
-stock_prices = pd.read_csv('../Resources/stock_prices.csv',parse_dates=True,index_col='Date',infer_datetime_format=True)
+crypto_prices = pd.read_csv('Resources/crypto_prices.csv',parse_dates=True,index_col='Date',infer_datetime_format=True)
+stock_prices = pd.read_csv('Resources/stock_prices.csv',parse_dates=True,index_col='Date',infer_datetime_format=True)
 all_prices = crypto_prices.join(stock_prices)
 market_prices = all_prices['SPY']
 all_prices = all_prices.drop(columns="SPY")
 all_prices_clean = all_prices.dropna()
 #st.write(all_prices_clean.head())
 
-mcaps = pd.read_csv('../Resources/market_caps.csv')
+mcaps = pd.read_csv('Resources/market_caps.csv')
 mcaps = dict(mcaps.values)
 del mcaps['SPY']
 
@@ -92,14 +92,14 @@ with Markowitz:
         graph_col.pyplot(plt)
     
     #if st.button('Show Monte Carlo Simulation'):
-        plot_col, data_col = st.beta_columns(2)
-        portfolio_data = df_select_assets
-        input_tickers = df_select_assets.columns
-        column_names = [(x,"close") for x in input_tickers]
-        portfolio_data.columns = pd.MultiIndex.from_tuples(column_names)
-        mc_plt, mc_tbl = monte_carlo(portfolio_data, weights["weight"].values)
-        plot_col.pyplot(mc_plt)
-        data_col.write(tbl)
+#         plot_col, data_col = st.beta_columns(2)
+#         portfolio_data = df_select_assets
+#         input_tickers = df_select_assets.columns
+#         column_names = [(x,"close") for x in input_tickers]
+#         portfolio_data.columns = pd.MultiIndex.from_tuples(column_names)
+#         mc_plt, mc_tbl = monte_carlo(portfolio_data, weights["weight"].values)
+#         plot_col.pyplot(mc_plt)
+#         data_col.write(tbl)
     
     
 with BlackLitterman:
