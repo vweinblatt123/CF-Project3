@@ -88,21 +88,6 @@ with Markowitz:
         fig = px.pie(weights, values = weights["weight"]*100, names = weights.index)
         pie_col.plotly_chart(fig)
         graph_col.pyplot(plt)
-        
-        plot_col, data_col = st.beta_columns(2)
-        portfolio_data = df_select_assets
-        input_tickers = df_select_assets.columns
-        column_names = [(x,"close") for x in input_tickers]
-        portfolio_data.columns = pd.MultiIndex.from_tuples(column_names)
-        mc_sim, mc_tbl = monte_carlo(portfolio_data, weights["weight"].values)
-        fig, ax = plt.subplots()
-        ax.hist(mc_sim, bins=20, density=True)
-        ax.set_title("Monte Carlo Simulation Distribution")
-        ax.set_xlabel("Return")
-        ax.set_ylabel("Frequency")
-        plot_col.pyplot(fig)
-        mc_tbl.name = "Monte Carlo Simulation Distribution"
-        data_col.table(mc_tbl)
 
 #     plot_col, data_col = st.beta_columns(2)
 #     portfolio_data = df_select_assets
@@ -112,7 +97,8 @@ with Markowitz:
 #     mc_plt, mc_tbl = monte_carlo(portfolio_data, weights["weight"].values)
 #     plot_col.pyplot(mc_plt)
 #     data_col.write(tbl)
-        
+    
+    
 with BlackLitterman:
     st.header("Black-Litterman with Views")
     
@@ -184,23 +170,8 @@ with BlackLitterman:
         pie_col.plotly_chart(fig)
         graph_col.pyplot(plt) 
 
-        return_bar = px.bar(rets_df, barmode = "group", labels = {"index":"Asset", "value" : "Returns (%)"}, title = "Prior vs Posterior Expected Returns")
+        return_bar = px.bar(rets_df, barmode = "group", labels = {"index":"", "value" : "Returns (%)"}, title = "Prior vs Posterior Expected Returns")
         st.plotly_chart(return_bar)
-        
-        plot_col, data_col = st.beta_columns(2)
-        portfolio_data = df_select_assets
-        input_tickers = df_select_assets.columns
-        column_names = [(x,"close") for x in input_tickers]
-        portfolio_data.columns = pd.MultiIndex.from_tuples(column_names)
-        mc_sim, mc_tbl = monte_carlo(portfolio_data, weights["weight"].values)
-        fig, ax = plt.subplots()
-        ax.hist(mc_sim, bins=20, density = True)
-        ax.set_title("Monte Carlo Simulation Distribution")
-        ax.set_xlabel("Return")
-        ax.set_ylabel("Frequency")
-        plot_col.pyplot(fig)
-        mc_tbl.name = "Monte Carlo Simulation Distribution"
-        data_col.table(mc_tbl)
 
         #print(select_assets)
         #print(Q)
