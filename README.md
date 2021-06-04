@@ -1,2 +1,2 @@
 # CF-Project3
-The YOLO Robo-Advisor
+#YOLO Advisors, Inc - your robo-advisor to avoid #FOMO
